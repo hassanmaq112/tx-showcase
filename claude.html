@@ -4319,7 +4319,12 @@ html.js .content article h2.in::after{width:72px;}
 .ehc-card:hover{transform:translateY(-4px);box-shadow:0 32px 70px -30px rgba(139,92,246,.35);}
 .ehc-card .ehc-t{font:700 .78rem/1 ui-monospace,monospace;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.5);margin:.2rem 0 .2rem .3rem;}
 .ehc{width:100%;height:380px;}
-@media (prefers-reduced-motion:reduce){html.js .tx-rv{opacity:1;transform:none;transition:none;}}
+/* Flowchart glow + directional flowing arrows */
+.mermaid .node rect,.mermaid .node circle,.mermaid .node polygon,.mermaid .node path{filter:drop-shadow(0 0 6px rgba(60,255,208,.5));}
+.mermaid .edgePaths path,.mermaid .edgePath path,.mermaid path.flowchart-link{stroke:#3cffd0 !important;stroke-width:2px !important;filter:drop-shadow(0 0 5px rgba(60,255,208,.75));stroke-dasharray:9 7;animation:txflow 1s linear infinite;}
+.mermaid marker path,.mermaid .arrowheadPath,.mermaid marker path[class]{fill:#3cffd0 !important;stroke:#3cffd0 !important;filter:drop-shadow(0 0 3px rgba(60,255,208,.9));}
+@keyframes txflow{to{stroke-dashoffset:-16;}}
+@media (prefers-reduced-motion:reduce){html.js .tx-rv{opacity:1;transform:none;transition:none;}.mermaid .edgePaths path,.mermaid .edgePath path,.mermaid path.flowchart-link{animation:none;}}
 </style><style>
 .hero3d{position:relative;width:100%;height:64vh;min-height:440px;border-radius:20px;overflow:hidden;background:radial-gradient(130% 130% at 50% 18%, #0c1226 0%, #060711 68%);box-shadow:0 40px 90px -34px rgba(60,255,208,.28), inset 0 0 0 1px rgba(255,255,255,.07);margin:1.5rem 0 0.5rem;}
 .hero3d canvas{display:block;}
@@ -4472,7 +4477,7 @@ html.js .content article h2.in::after{width:72px;}
     </article>
     <footer class="page-footer">
       <div class="footer-stripe" aria-hidden="true"></div>
-      <p>tx-docs · Documents, Reimagined · v3 · claude · 18 Jun 2026 (mtime) · ~4 min read</p>
+      <p>tx-docs · Documents, Reimagined · v3 · claude · 18 Jun 2026 (mtime) · ~5 min read</p>
     </footer>
   </main>
 </div>
@@ -4484,8 +4489,8 @@ html.js .content article h2.in::after{width:72px;}
   <h4>Doc Meta</h4>
   <div class="meta-row"><span>Version</span><span>v3</span></div>
   <div class="meta-row"><span>Updated</span><span>18 Jun 2026 (mtime)</span></div>
-  <div class="meta-row"><span>Read time</span><span>~4 min</span></div>
-  <div class="meta-row"><span>Words</span><span>842</span></div>
+  <div class="meta-row"><span>Read time</span><span>~5 min</span></div>
+  <div class="meta-row"><span>Words</span><span>895</span></div>
   <div class="meta-row"><span>Sections</span><span>5</span></div>
   <div class="meta-row"><span>Design</span><span>claude</span></div>
   <div class="meta-section">
