@@ -1,0 +1,28 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<style>html,body{margin:0;height:100%;overflow:hidden;background:radial-gradient(130% 130% at 50% 30%,#0c1226 0%,#060711 70%)}#c{width:100vw;height:100vh;display:block}</style></head>
+<body><div id="c"></div>
+<script src="https://unpkg.com/three@0.147.0/build/three.min.js"></script>
+<script src="https://unpkg.com/three@0.147.0/examples/js/environments/RoomEnvironment.js"></script>
+<script src="https://unpkg.com/three@0.147.0/examples/js/shaders/CopyShader.js"></script>
+<script src="https://unpkg.com/three@0.147.0/examples/js/shaders/LuminosityHighPassShader.js"></script>
+<script src="https://unpkg.com/three@0.147.0/examples/js/postprocessing/EffectComposer.js"></script>
+<script src="https://unpkg.com/three@0.147.0/examples/js/postprocessing/RenderPass.js"></script>
+<script src="https://unpkg.com/three@0.147.0/examples/js/postprocessing/ShaderPass.js"></script>
+<script src="https://unpkg.com/three@0.147.0/examples/js/postprocessing/UnrealBloomPass.js"></script>
+<script>
+(function(){var el=document.getElementById('c');if(!window.THREE)return;
+var W=function(){return window.innerWidth;},H=function(){return window.innerHeight;};
+var r=new THREE.WebGLRenderer({antialias:true,alpha:true});r.setPixelRatio(Math.min(devicePixelRatio,2));r.setSize(W(),H());r.outputEncoding=THREE.sRGBEncoding;r.toneMapping=THREE.ACESFilmicToneMapping;r.toneMappingExposure=1.2;el.appendChild(r.domElement);
+var s=new THREE.Scene();var cam=new THREE.PerspectiveCamera(40,W()/H(),0.1,100);cam.position.set(0,0.3,6.4);
+var pm=new THREE.PMREMGenerator(r);s.environment=pm.fromScene(new THREE.RoomEnvironment(r),0.035).texture;
+var knot=new THREE.Mesh(new THREE.TorusKnotGeometry(1.15,0.36,260,36),new THREE.MeshStandardMaterial({color:0x05060c,metalness:1,roughness:0.16,envMapIntensity:1.5}));s.add(knot);
+var L1=new THREE.PointLight(0x3cffd0,200,60,2);L1.position.set(5,4,5);s.add(L1);
+var L2=new THREE.PointLight(0x8b5cf6,170,60,2);L2.position.set(-5,-3,4);s.add(L2);
+var L3=new THREE.PointLight(0xff4d6d,100,60,2);L3.position.set(0,5,-4);s.add(L3);
+s.add(new THREE.AmbientLight(0xffffff,0.12));
+var N=1200,p=new Float32Array(N*3);for(var i=0;i<N*3;i++)p[i]=(Math.random()-0.5)*46;
+s.add(new THREE.Points(new THREE.BufferGeometry().setAttribute('position',new THREE.BufferAttribute(p,3)),new THREE.PointsMaterial({color:0x9aa6c8,size:0.045,transparent:true,opacity:.8})));
+var comp=new THREE.EffectComposer(r);comp.addPass(new THREE.RenderPass(s,cam));comp.addPass(new THREE.UnrealBloomPass(new THREE.Vector2(W(),H()),0.9,0.55,0.08));
+addEventListener('resize',function(){cam.aspect=W()/H();cam.updateProjectionMatrix();r.setSize(W(),H());comp.setSize(W(),H());});
+r.setAnimationLoop(function(){knot.rotation.x+=0.0022;knot.rotation.y+=0.0031;comp.render();});})();
+</script></body></html>
