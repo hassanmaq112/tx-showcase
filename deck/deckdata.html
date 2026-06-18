@@ -1,0 +1,22 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<style>html,body{margin:0;height:100%;overflow:hidden;background:radial-gradient(130% 130% at 50% 20%,#0c1226 0%,#060711 72%);font-family:ui-sans-serif,system-ui}
+.wrap{display:flex;gap:1.5rem;align-items:center;justify-content:center;height:100vh;padding:7% 5% 4%}
+.c{flex:1;height:74%}#area{flex:1.25}</style></head>
+<body><div class="wrap"><div id="area" class="c"></div><div id="pie" class="c"></div></div>
+<script src="https://unpkg.com/echarts@5.5.0/dist/echarts.min.js"></script>
+<script>
+(function(){var MINT='#3cffd0',VIO='#8b5cf6',PINK='#ff4d6d',BLUE='#5b8def';
+function g(c1,c2){return new echarts.graphic.LinearGradient(0,0,0,1,[{offset:0,color:c1},{offset:1,color:c2}]);}
+function ax(){return {axisLine:{lineStyle:{color:'rgba(255,255,255,.18)'}},axisLabel:{color:'rgba(255,255,255,.62)',fontSize:13},splitLine:{lineStyle:{color:'rgba(255,255,255,.06)'}}};}
+var a=echarts.init(document.getElementById('area'));
+var aOpt={backgroundColor:'transparent',grid:{left:50,right:24,top:30,bottom:34},tooltip:{trigger:'axis'},
+ xAxis:Object.assign({type:'category',boundaryGap:false,data:['Open','Skim','Read','Reply','Forward']},ax()),
+ yAxis:Object.assign({type:'value'},ax()),
+ series:[{type:'line',smooth:true,symbol:'circle',symbolSize:10,data:[100,180,240,300,360],lineStyle:{width:4,color:MINT,shadowColor:MINT,shadowBlur:18},itemStyle:{color:MINT,borderColor:'#06070f',borderWidth:2},areaStyle:{color:g('rgba(60,255,208,.5)','rgba(60,255,208,0)')},animationDuration:1700,animationEasing:'cubicOut'}]};
+var p=echarts.init(document.getElementById('pie'));
+var pOpt={backgroundColor:'transparent',tooltip:{trigger:'item'},legend:{textStyle:{color:'#cdd',fontSize:12},bottom:0},color:[MINT,VIO,PINK,BLUE],
+ series:[{type:'pie',radius:['44%','72%'],center:['50%','46%'],itemStyle:{borderColor:'#06070f',borderWidth:3},label:{color:'#dde'},data:[{value:42,name:'Hero'},{value:26,name:'Data'},{value:18,name:'Diagrams'},{value:14,name:'Copy'}],animationType:'scale',animationEasing:'elasticOut',animationDuration:1200}]};
+function play(){a.setOption(aOpt,true);p.setOption(pOpt,true);}
+play(); setInterval(play,7000);
+window.addEventListener('resize',function(){a.resize();p.resize();});})();
+</script></body></html>
