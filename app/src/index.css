@@ -1,0 +1,77 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Light theme — soft, paper-like canvas with a confident indigo brand. */
+  --canvas: 248 250 252; /* slate-50 */
+  --surface: 255 255 255;
+  --elevated: 255 255 255;
+  --border: 226 232 240; /* slate-200 */
+  --ink: 15 23 42; /* slate-900 */
+  --muted: 100 116 139; /* slate-500 */
+  --brand: 79 70 229; /* indigo-600 */
+  --brand-ink: 255 255 255;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --canvas: 2 6 23; /* slate-950 */
+    --surface: 15 23 42; /* slate-900 */
+    --elevated: 30 41 59; /* slate-800 */
+    --border: 51 65 85; /* slate-700 */
+    --ink: 241 245 249; /* slate-100 */
+    --muted: 148 163 184; /* slate-400 */
+    --brand: 129 140 248; /* indigo-400 */
+    --brand-ink: 15 23 42;
+  }
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: rgb(var(--canvas));
+  color: rgb(var(--ink));
+  font-family: theme('fontFamily.sans');
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  /* Prevent rubber-band overscroll revealing white behind the app. */
+  overscroll-behavior-y: none;
+}
+
+/* Respect iOS safe areas via utility classes. */
+@layer utilities {
+  .pt-safe {
+    padding-top: env(safe-area-inset-top);
+  }
+  .pb-safe {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  .h-safe-bottom {
+    height: env(safe-area-inset-bottom);
+  }
+  .no-tap-highlight {
+    -webkit-tap-highlight-color: transparent;
+  }
+  /* Hide scrollbars on horizontal scrollers while keeping scroll. */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
+
+/* Larger tap targets, no iOS zoom on focus (16px inputs). */
+input,
+select,
+textarea,
+button {
+  font-size: 16px;
+}

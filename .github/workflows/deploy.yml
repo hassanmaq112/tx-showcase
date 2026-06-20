@@ -1,0 +1,78 @@
+name: Deploy to GitHub Pages
+
+# Publishes the existing showcase HTML at the site root and the expense-tracker
+# PWA under /app. The app is built with VITE_BASE_PATH=/tx-showcase/app/ so its
+# assets resolve correctly under the project Pages subpath.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'app/**'
+      - '*.html'
+      - 'deck/**'
+      - '.github/workflows/deploy.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: app/package-lock.json
+
+      - name: Install dependencies
+        working-directory: app
+        run: npm ci
+
+      - name: Build app
+        working-directory: app
+        run: npm run build
+        env:
+          VITE_BASE_PATH: /tx-showcase/app/
+
+      - name: Assemble Pages site
+        run: |
+          mkdir -p site
+          # Showcase documents + deck served at the site root.
+          cp -f ./*.html site/ 2>/dev/null || true
+          cp -f README.md site/ 2>/dev/null || true
+          if [ -d deck ]; then cp -r deck site/deck; fi
+          # Expense-tracker PWA served under /app.
+          mkdir -p site/app
+          cp -r app/dist/* site/app/
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
