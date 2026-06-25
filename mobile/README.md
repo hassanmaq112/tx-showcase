@@ -50,6 +50,39 @@ local-only.
 - Auth (email + password), local-first cloud sync (last-write-wins, offline queue,
   realtime), receipts in private Supabase Storage with local cache
 
+## Standalone builds (EAS)
+
+Expo Go is great for development, but for a real installable app (Android **APK**
+or iOS **TestFlight/ad-hoc**) use **EAS Build** (cloud builds — no Mac needed).
+`eas.json` defines the profiles.
+
+One-time:
+```bash
+npm i -g eas-cli
+eas login                 # your Expo account (free)
+eas init                  # links the project, writes extra.eas.projectId into app.json
+```
+
+Build:
+```bash
+# Android APK you can sideload onto a phone:
+eas build -p android --profile preview
+
+# iOS build for your device / TestFlight (needs an Apple Developer account;
+# EAS will guide you through credentials):
+eas build -p ios --profile preview      # ad-hoc internal install
+eas build -p ios --profile production    # App Store / TestFlight
+eas submit -p ios --profile production   # upload to TestFlight
+```
+
+Profiles:
+- **development** — dev client (`expo-dev-client`) for debugging with native modules
+- **preview** — internal distribution; Android emits an installable `.apk`
+- **production** — store builds with auto-incrementing build numbers
+
+Remember to set `mobile/.env` (or EAS env vars / secrets) for Supabase before a
+build if you want the cloud backend baked in.
+
 ## Project layout
 ```
 mobile/
