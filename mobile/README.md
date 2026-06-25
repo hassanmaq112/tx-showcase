@@ -1,56 +1,70 @@
-# Welcome to your Expo app 👋
+# Expense Tracker — Mobile (React Native + Expo)
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+A native iOS/Android expense tracker: log expenses with receipt photos, see
+category breakdowns and trends, set budgets with alerts. **Local-first** (works
+fully offline) with an optional **Supabase** backend for accounts, cross-device
+sync, and cloud receipt storage.
 
-## Get started
+Built with **Expo SDK 56**, React Native, TypeScript, expo-router. Shares its
+pure domain logic (types, store/reducer, analytics, dates, budgets) with the web
+PWA in `../app`.
 
-1. Install dependencies
-
-   ```bash
-   npm install
-   ```
-
-2. Start the app
-
-   ```bash
-   npx expo start
-   ```
-
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
+## Run it (no Mac required)
 
 ```bash
-npm run reset-project
+cd mobile
+npm install
+npx expo start
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+- **On your iPhone/Android:** install **Expo Go** from the App Store / Play Store,
+  then scan the QR code printed in the terminal. The app loads on your device.
+- **In a browser (quick look):** press `w`, or `npm run web`. Some native-only
+  features (camera, pinch-zoom lightbox) are stubbed on web; it's for sanity only.
 
-### Other setup steps
+The app works immediately with **no backend** — data is stored on-device.
 
-- To set up ESLint for linting, run `npx expo lint`, or follow our guide on ["Using ESLint and Prettier"](https://docs.expo.dev/guides/using-eslint/)
-- If you'd like to set up unit testing, follow our guide on ["Unit Testing with Jest"](https://docs.expo.dev/develop/unit-testing/)
-- Learn more about the TypeScript setup in this template in our guide on ["Using TypeScript"](https://docs.expo.dev/guides/typescript/)
+## Enable the cloud backend (optional)
 
-## Learn more
+See [`supabase/README.md`](./supabase/README.md). In short: create a Supabase
+project, run `supabase/migrations/0001_init.sql`, then:
 
-To learn more about developing your project with Expo, look at the following resources:
+```bash
+cp .env.example .env   # fill EXPO_PUBLIC_SUPABASE_URL + EXPO_PUBLIC_SUPABASE_ANON_KEY
+npx expo start -c
+```
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+With keys set, the app shows a sign-in screen and syncs; without them it stays
+local-only.
 
-## Join the community
+## Features
+- Expense CRUD with category, date, notes, and receipt photo (camera or gallery,
+  auto-compressed to ~200 KB)
+- Dashboard: month/week/daily totals, global budget progress bar, day-grouped list
+- Analytics: category donut + ranked breakdown, 12-month trend, month-over-month,
+  per-category budgets
+- Budgets: global + per-category limits with warn/over alerts
+- Settings: currency, category manager (delete → reassign to "Other"), JSON/CSV
+  export (share sheet), clear-all
+- Light/dark following the system; safe-area aware; native tab bar with center Add
+- Auth (email + password), local-first cloud sync (last-write-wins, offline queue,
+  realtime), receipts in private Supabase Storage with local cache
 
-Join our community of developers creating universal apps.
+## Project layout
+```
+mobile/
+  src/app/            expo-router routes: (tabs) Home/Stats/Settings, add & edit modals, (auth) sign-in
+  src/screens/        screen components
+  src/components/     ui primitives, expense/budget/analytics/settings, layout, SyncManager
+  src/store/          Context + useReducer store (ported from web)
+  src/lib/            storage (AsyncStorage), receipts (file-system), compress, export,
+                      analytics, dates, currency, supabase, sync, receiptsRemote
+  src/theme/          StyleSheet design tokens (light/dark)
+  supabase/           SQL migration + setup guide
+```
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+## Scripts
+- `npm run start` — Expo dev server (QR for Expo Go)
+- `npm run web` — run in the browser
+- `npm run lint` — Expo ESLint
+- `npx tsc --noEmit` — typecheck
