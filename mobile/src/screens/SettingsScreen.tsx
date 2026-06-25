@@ -3,10 +3,12 @@ import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { ScreenHeader } from '@/components/layout/ScreenHeader';
 import { Field } from '@/components/ui/Field';
 import { Select } from '@/components/ui/Select';
+import { AccountSettings } from '@/components/settings/AccountSettings';
 import { BudgetSettings } from '@/components/settings/BudgetSettings';
 import { CategoryManager } from '@/components/settings/CategoryManager';
 import { DataSettings } from '@/components/settings/DataSettings';
 import { ThemeNote } from '@/components/settings/ThemeNote';
+import { useAuth } from '@/hooks/useAuth';
 import { useAppStore } from '@/hooks/useAppStore';
 import { useTheme } from '@/theme';
 
@@ -15,11 +17,15 @@ const CURRENCIES = ['USD', 'EUR', 'GBP', 'CAD', 'AUD', 'JPY', 'INR', 'CNY', 'CHF
 export function SettingsScreen() {
   const { state, dispatch } = useAppStore();
   const { colors } = useTheme();
+  const { configured } = useAuth();
 
   return (
     <View style={{ flex: 1, backgroundColor: colors.canvas }}>
       <ScreenHeader title="Settings" />
       <ScrollView contentContainerStyle={styles.content}>
+        {configured && (
+          <Section title="Account"><AccountSettings /></Section>
+        )}
         <Section title="General">
           <Field label="Currency">
             <Select
